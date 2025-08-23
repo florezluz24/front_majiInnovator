@@ -1,0 +1,115 @@
+<div class="register-container">
+  <!-- Message Alert Component -->
+  <app-message-alert 
+    [alert]="alert" 
+    [showCloseButton]="true"
+    [autoHide]="false"
+    (closeAlert)="onCloseAlert()">
+  </app-message-alert>
+
+  <!-- Header Section -->
+  <div class="header-section text-center text-white py-5">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">{{ title }}</h1>
+      <p class="lead mb-4">{{ subtitle }}</p>
+    </div>
+  </div>
+
+  <!-- Register Section -->
+  <div class="register-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+          <div class="text-center mb-4">
+            <h3 class="text-dark fw-bold">Crear Nueva Cuenta</h3>
+            <p class="text-muted">Completa los datos para registrarte</p>
+          </div>
+          
+          <!-- Register Form -->
+          <div class="card shadow">
+            <div class="card-body p-4">
+              <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+                <div class="mb-3">
+                  <label for="nombreCompleto" class="form-label fw-semibold">Nombre Completo</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-lg" 
+                    id="nombreCompleto" 
+                    name="nombreCompleto"
+                    [(ngModel)]="registerData.nombreCompleto"
+                    placeholder="Tu nombre completo"
+                    required
+                    [disabled]="isLoading"
+                  >
+                </div>
+                
+                <div class="mb-3">
+                  <label for="cedula" class="form-label fw-semibold">Cédula</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-lg" 
+                    id="cedula" 
+                    name="cedula"
+                    [(ngModel)]="registerData.cedula"
+                    placeholder="Tu número de cédula"
+                    required
+                    [disabled]="isLoading"
+                  >
+                  <div class="form-text">Ingresa tu número de cédula</div>
+                </div>
+                
+                <div class="mb-4">
+                  <label for="password" class="form-label fw-semibold">Contraseña</label>
+                  <input 
+                    type="password" 
+                    class="form-control form-control-lg" 
+                    id="password" 
+                    name="password"
+                    [(ngModel)]="registerData.password"
+                    placeholder="Tu contraseña"
+                    required
+                    [disabled]="isLoading"
+                  >
+                  <div class="form-text">Ingresa tu contraseña</div>
+                </div>
+                
+                <div class="d-grid gap-2 mb-3">
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary btn-lg"
+                    [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Registrarse</span>
+                    <span *ngIf="isLoading">
+                      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Registrando...
+                    </span>
+                  </button>
+                </div>
+                
+                                <div class="d-grid gap-2">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-secondary btn-lg" 
+                    (click)="onBackToLogin()"
+                    [disabled]="isLoading">
+                    Volver al Login
+                  </button>
+                  
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer-section text-center text-white py-4">
+    <div class="container">
+      <p class="mb-1">©2024 MAJI Innovators S.A.S. Todos los derechos reservados.</p>
+      <p class="mb-0">Sistema de Encuestas y Comercio Electrónico</p>
+    </div>
+  </div>
+</div>

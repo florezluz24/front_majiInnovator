@@ -1,0 +1,75 @@
+<div class="login-container">
+  <!-- Header Section -->
+  <div class="header-section text-center text-white py-5">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3">{{ title }}</h1>
+      <p class="lead mb-4">{{ subtitle }}</p>
+    </div>
+  </div>
+
+  <!-- Login Section -->
+  <div class="login-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+          <div class="text-center mb-4">
+            <h3 class="text-dark fw-bold">¿Listo para comenzar?</h3>
+          </div>
+          
+          <!-- Login Form -->
+          <div class="card shadow">
+            <div class="card-body p-4">
+              <form (ngSubmit)="onLogin()">
+                <div class="mb-3">
+                  <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
+                  <input 
+                    type="email" 
+                    class="form-control form-control-lg" 
+                    id="email" 
+                    name="email"
+                    [(ngModel)]="loginData.email"
+                    placeholder="tu@email.com"
+                    required
+                  >
+                </div>
+                
+                <div class="mb-4">
+                  <label for="password" class="form-label fw-semibold">Contraseña</label>
+                  <input 
+                    type="password" 
+                    class="form-control form-control-lg" 
+                    id="password" 
+                    name="password"
+                    [(ngModel)]="loginData.password"
+                    placeholder="Tu contraseña"
+                    required
+                  >
+                </div>
+                
+                <div class="d-grid gap-2 mb-3">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    Iniciar Sesión
+                  </button>
+                </div>
+                
+                <div class="d-grid">
+                  <button type="button" class="btn btn-outline-primary btn-lg" (click)="onRegister()">
+                    Registrarse
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="footer-section text-center text-white py-4">
+    <div class="container">
+      <p class="mb-1">©2024 MAJI Innovators S.A.S. Todos los derechos reservados.</p>
+      <p class="mb-0">Sistema de Encuestas y Comercio Electrónico</p>
+    </div>
+  </div>
+</div>

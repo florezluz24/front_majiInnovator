@@ -1,0 +1,17 @@
+<div *ngIf="alert" class="message-alert-container">
+  <div [class]="getAlertClass()" role="alert">
+    <div class="d-flex align-items-center">
+      <i [class]="getIconClass()" class="me-2"></i>
+      <div class="flex-grow-1">
+        <span>{{ alert.message }}</span>
+      </div>
+      <button 
+        *ngIf="showCloseButton"
+        type="button" 
+        class="btn-close" 
+        (click)="onClose()"
+        aria-label="Close">
+      </button>
+    </div>
+  </div>
+</div>
