@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { MessageAlert } from '../shared/message-alert/message-alert.component';
 
 export interface UsuarioDTO {
   nombre: string;
@@ -28,8 +29,54 @@ export interface ErrorResponse {
 })
 export class AuthService {
   private readonly baseUrl = 'https://localhost:7166/api'; // URL del backend
+  
+  // BehaviorSubject para manejar mensajes de alerta
+  private messageSubject = new BehaviorSubject<MessageAlert | null>(null);
+  public message$ = this.messageSubject.asObservable();
 
   constructor(private http: HttpClient) { }
+
+  // Métodos para mostrar diferentes tipos de mensajes
+  mostrarMensajeExito(mensaje: string, titulo?: string): void {
+    const alerta: MessageAlert = {
+      type: 'success',
+      message: mensaje,
+      title: titulo
+    };
+    this.messageSubject.next(alerta);
+  }
+
+  mostrarMensajeError(mensaje: string, titulo?: string): void {
+    const alerta: MessageAlert = {
+      type: 'error',
+      message: mensaje,
+      title: titulo
+    };
+    this.messageSubject.next(alerta);
+  }
+
+  mostrarMensajeAdvertencia(mensaje: string, titulo?: string): void {
+    const alerta: MessageAlert = {
+      type: 'warning',
+      message: mensaje,
+      title: titulo
+    };
+    this.messageSubject.next(alerta);
+  }
+
+  mostrarMensajeInfo(mensaje: string, titulo?: string): void {
+    const alerta: MessageAlert = {
+      type: 'info',
+      message: mensaje,
+      title: titulo
+    };
+    this.messageSubject.next(alerta);
+  }
+
+  // Método para limpiar mensajes
+  limpiarMensaje(): void {
+    this.messageSubject.next(null);
+  }
 
   // Registrar nuevo usuario
   registrarUsuario(usuario: UsuarioDTO): Observable<Usuario> {
@@ -67,6 +114,7 @@ export class AuthService {
         message: 'No se puede conectar con el servidor. Verifica que esté ejecutándose.', 
         title: 'Error de Conexión' 
       };
+      this.mostrarMensajeError(errorData.message, errorData.title);
       return throwError(() => new Error(JSON.stringify(errorData)));
     }
 
@@ -99,6 +147,9 @@ export class AuthService {
     }
 
     const finalError = { message: errorMessage, title: errorTitle };
+    
+    // Mostrar el mensaje de error automáticamente
+    this.mostrarMensajeError(finalError.message, finalError.title);
     
     return throwError(() => new Error(JSON.stringify(finalError)));
   }
