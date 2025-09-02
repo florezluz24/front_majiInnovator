@@ -10,12 +10,25 @@ export interface UsuarioDTO {
   password: string;
 }
 
+export interface ValidarAccesoDTO {
+  cedula: string;
+  password: string;
+}
+
 export interface Usuario {
   id: number;
   nombre: string;
   cedula: string;
   telefono: string;
   password: string;
+  rol: string;
+}
+
+export interface UsuarioRespuesta {
+  id: number;
+  nombre: string;
+  cedula: string;
+  telefono: string;
   rol: string;
 }
 
@@ -76,6 +89,18 @@ export class AuthService {
   // Método para limpiar mensajes
   limpiarMensaje(): void {
     this.messageSubject.next(null);
+  }
+
+  // Validar acceso del usuario
+  validarAcceso(credenciales: ValidarAccesoDTO): Observable<UsuarioRespuesta> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<UsuarioRespuesta>(`${this.baseUrl}/Usuario/validar-acceso`, credenciales, { headers })
+      .pipe(
+        catchError(this.handleError.bind(this))
+      );
   }
 
   // Registrar nuevo usuario

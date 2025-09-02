@@ -19,17 +19,33 @@
           <!-- Login Form -->
           <div class="card shadow">
             <div class="card-body p-4">
+              <!-- Componente de Mensajes del Servicio -->
+              <app-message-alert 
+                [alert]="(authService.message$ | async)" 
+                [autoHide]="true" 
+                [autoHideDelay]="5000"
+                (closeAlert)="authService.limpiarMensaje()"
+              ></app-message-alert>
+
               <form (ngSubmit)="onLogin()">
+                <!-- Mensaje de Error Local -->
+                <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                  {{ errorMessage }}
+                  <button type="button" class="btn-close" (click)="limpiarError()" aria-label="Close"></button>
+                </div>
+
                 <div class="mb-3">
-                  <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
+                  <label for="cedula" class="form-label fw-semibold">Cédula</label>
                   <input 
-                    type="email" 
+                    type="text" 
                     class="form-control form-control-lg" 
-                    id="email" 
-                    name="email"
-                    [(ngModel)]="loginData.email"
-                    placeholder="tu@email.com"
+                    id="cedula" 
+                    name="cedula"
+                    [(ngModel)]="loginData.cedula"
+                    (input)="onCedulaChange()"
+                    placeholder="12345678"
                     required
+                    [disabled]="isLoading"
                   >
                 </div>
                 
@@ -41,19 +57,36 @@
                     id="password" 
                     name="password"
                     [(ngModel)]="loginData.password"
+                    (input)="onPasswordChange()"
                     placeholder="Tu contraseña"
                     required
+                    [disabled]="isLoading"
                   >
                 </div>
                 
                 <div class="d-grid gap-2 mb-3">
-                  <button type="submit" class="btn btn-primary btn-lg">
-                    Iniciar Sesión
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary btn-lg"
+                    [disabled]="isLoading"
+                  >
+                    <span *ngIf="!isLoading">Iniciar Sesión</span>
+                    <span *ngIf="isLoading" class="d-flex align-items-center justify-content-center">
+                      <div class="spinner-border spinner-border-sm me-2" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                      Iniciando Sesión...
+                    </span>
                   </button>
                 </div>
                 
                 <div class="d-grid">
-                  <button type="button" class="btn btn-outline-primary btn-lg" (click)="onRegister()">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-primary btn-lg" 
+                    (click)="onRegister()"
+                    [disabled]="isLoading"
+                  >
                     Registrarse
                   </button>
                 </div>

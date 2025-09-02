@@ -1,59 +1,110 @@
-# MajiInnovator
+# Maji Innovator - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
+Aplicación frontend desarrollada en Angular 20 con Server-Side Rendering (SSR) para el sistema de encuestas Maji Innovator.
 
-## Development server
+## 🚀 Tecnologías
 
-To start a local development server, run:
+- **Angular 20.2.0** - Framework principal
+- **Angular SSR** - Renderizado del lado del servidor
+- **Bootstrap 5.3.7** - Framework CSS
+- **Ng-Bootstrap 19.0.1** - Componentes Angular para Bootstrap
+- **Bootstrap Icons 1.13.1** - Iconografía
+- **TypeScript 5.9.2** - Lenguaje de programación
+- **SCSS** - Preprocesador CSS
 
+## 📋 Prerrequisitos
+
+- Node.js (versión 18 o superior)
+- npm (viene incluido con Node.js)
+
+## 🛠️ Instalación
+
+1. Clona el repositorio:
 ```bash
-ng serve
+git clone <url-del-repositorio>
+cd front_majiInnovator
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+2. Instala las dependencias:
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🏃‍♂️ Ejecución
 
+### Desarrollo
 ```bash
-ng generate --help
+npm start
+```
+La aplicación estará disponible en `http://localhost:4200`
+
+### Construcción para producción
+```bash
+npm run build
 ```
 
-## Building
-
-To build the project run:
-
+### Ejecutar pruebas
 ```bash
-ng build
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
+### Servidor SSR
 ```bash
-ng test
+npm run serve:ssr:maji-innovator
 ```
 
-## Running end-to-end tests
+## 📁 Estructura del Proyecto
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```
+src/
+├── app/
+│   ├── login/           # Componente de inicio de sesión
+│   ├── register/        # Componente de registro
+│   ├── services/        # Servicios de la aplicación
+│   │   └── auth.service.ts
+│   ├── shared/          # Componentes compartidos
+│   │   ├── connection-status/
+│   │   └── message-alert/
+│   ├── app.config.ts    # Configuración de la aplicación
+│   ├── app.routes.ts    # Rutas de la aplicación
+│   └── app.ts           # Componente principal
+├── main.ts              # Punto de entrada del cliente
+├── main.server.ts       # Punto de entrada del servidor
+└── server.ts            # Configuración del servidor Express
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🔧 Configuración
 
-## Additional Resources
+### Variables de Entorno
+El proyecto se conecta al backend en `http://localhost:5000` por defecto. Para cambiar esta configuración, modifica el servicio de autenticación.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### CORS
+El backend está configurado para aceptar peticiones desde `http://localhost:4200` y `https://localhost:4200`.
+
+## 🎨 Características
+
+- **Autenticación**: Sistema de login y registro
+- **Responsive Design**: Interfaz adaptable a diferentes dispositivos
+- **Server-Side Rendering**: Mejor rendimiento y SEO
+- **Componentes Reutilizables**: Arquitectura modular
+- **Alertas**: Sistema de notificaciones integrado
+
+## 📝 Scripts Disponibles
+
+- `npm start` - Inicia el servidor de desarrollo
+- `npm run build` - Construye la aplicación para producción
+- `npm run watch` - Construye y observa cambios
+- `npm test` - Ejecuta las pruebas unitarias
+- `npm run serve:ssr:maji-innovator` - Ejecuta la versión SSR
+
+## 🤝 Contribución
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
