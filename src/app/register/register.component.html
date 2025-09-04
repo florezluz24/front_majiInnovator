@@ -58,7 +58,7 @@
                   <div class="form-text">Ingresa tu número de cédula</div>
                 </div>
                 
-                <div class="mb-4">
+                <div class="mb-3">
                   <label for="password" class="form-label fw-semibold">Contraseña</label>
                   <input 
                     type="password" 
@@ -71,6 +71,21 @@
                     [disabled]="isLoading"
                   >
                   <div class="form-text">Ingresa tu contraseña</div>
+                </div>
+                
+                <div class="mb-4">
+                  <label for="confirmPassword" class="form-label fw-semibold">Confirmar Contraseña</label>
+                  <input 
+                    type="password" 
+                    class="form-control form-control-lg" 
+                    id="confirmPassword" 
+                    name="confirmPassword"
+                    [(ngModel)]="registerData.confirmPassword"
+                    placeholder="Confirma tu contraseña"
+                    required
+                    [disabled]="isLoading"
+                  >
+                  <div class="form-text">Repite tu contraseña para confirmar</div>
                 </div>
                 
                 <div class="d-grid gap-2 mb-3">

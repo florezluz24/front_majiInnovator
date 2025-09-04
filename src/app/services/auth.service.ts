@@ -37,15 +37,34 @@ export interface ErrorResponse {
   title: string;
 }
 
+export interface Encuesta {
+  pregunta: string;
+  respuestas: string[];
+}
+
+export interface UsuarioCompleto {
+  id: number;
+  nombre: string;
+  cedula: string;
+  telefono: string;
+  password: string;
+  rol: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly baseUrl = 'https://localhost:7166/api'; // URL del backend
+  private readonly STORAGE_KEY = 'currentUser';
   
   // BehaviorSubject para manejar mensajes de alerta
   private messageSubject = new BehaviorSubject<MessageAlert | null>(null);
   public message$ = this.messageSubject.asObservable();
+
+  // BehaviorSubject para manejar estado de carga
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -91,6 +110,15 @@ export class AuthService {
     this.messageSubject.next(null);
   }
 
+  // Métodos para manejar estado de carga
+  setLoading(loading: boolean): void {
+    this.loadingSubject.next(loading);
+  }
+
+  getLoading(): boolean {
+    return this.loadingSubject.value;
+  }
+
   // Validar acceso del usuario
   validarAcceso(credenciales: ValidarAccesoDTO): Observable<UsuarioRespuesta> {
     const headers = new HttpHeaders({
@@ -115,13 +143,6 @@ export class AuthService {
       );
   }
 
-  // Obtener todos los usuarios (para pruebas)
-  obtenerUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.baseUrl}/Usuario`)
-      .pipe(
-        catchError(this.handleError.bind(this))
-      );
-  }
 
   // Obtener usuario por ID
   obtenerUsuarioPorId(id: number): Observable<Usuario> {
@@ -133,6 +154,8 @@ export class AuthService {
 
   // Manejo simple de errores - solo pasa la información del backend
   private handleError(error: HttpErrorResponse): Observable<never> {
+    this.setLoading(false);
+    
     // Si es un error de conexión (status 0), mostrar mensaje básico
     if (error.status === 0) {
       const errorData = { 
@@ -177,5 +200,68 @@ export class AuthService {
     this.mostrarMensajeError(finalError.message, finalError.title);
     
     return throwError(() => new Error(JSON.stringify(finalError)));
+  }
+
+  // Métodos para manejo de sesión y roles
+  private isLocalStorageAvailable(): boolean {
+    return typeof localStorage !== 'undefined';
+  }
+
+  login(usuario: UsuarioRespuesta): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(usuario));
+    }
+  }
+
+  logout(): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
+  }
+
+  isAuthenticated(): boolean {
+    if (!this.isLocalStorageAvailable()) {
+      return false;
+    }
+    const user = localStorage.getItem(this.STORAGE_KEY);
+    return user !== null;
+  }
+
+  getCurrentUser(): UsuarioRespuesta | null {
+    if (!this.isLocalStorageAvailable()) {
+      return null;
+    }
+    const user = localStorage.getItem(this.STORAGE_KEY);
+    if (user) {
+      return JSON.parse(user);
+    }
+    return null;
+  }
+
+  getUserRole(): string | null {
+    const user = this.getCurrentUser();
+    return user ? user.rol : null;
+  }
+
+  isAdmin(): boolean {
+    return this.getUserRole() === 'Administrador';
+  }
+
+  // Método para obtener todas las encuestas
+  obtenerEncuestas(): Observable<Encuesta[]> {
+    this.setLoading(true);
+    return this.http.get<Encuesta[]>(`${this.baseUrl}/Encuesta`)
+      .pipe(
+        catchError(this.handleError.bind(this))
+      );
+  }
+
+  // Método para obtener todos los usuarios
+  obtenerUsuarios(): Observable<UsuarioCompleto[]> {
+    this.setLoading(true);
+    return this.http.get<UsuarioCompleto[]>(`${this.baseUrl}/Usuario`)
+      .pipe(
+        catchError(this.handleError.bind(this))
+      );
   }
 }

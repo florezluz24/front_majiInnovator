@@ -19,7 +19,8 @@ export class RegisterComponent {
   protected registerData = {
     nombreCompleto: '',
     cedula: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   };
 
   protected isLoading = false;
@@ -54,7 +55,8 @@ export class RegisterComponent {
         this.registerData = {
           nombreCompleto: '',
           cedula: '',
-          password: ''
+          password: '',
+          confirmPassword: ''
         };
 
         // Redirigir al login después de 2 segundos
@@ -103,6 +105,16 @@ export class RegisterComponent {
 
     if (!this.registerData.password.trim()) {
       this.showErrorMessage('La contraseña es obligatoria', 'Validación');
+      return false;
+    }
+
+    if (!this.registerData.confirmPassword.trim()) {
+      this.showErrorMessage('La confirmación de contraseña es obligatoria', 'Validación');
+      return false;
+    }
+
+    if (this.registerData.password !== this.registerData.confirmPassword) {
+      this.showErrorMessage('Las contraseñas no coinciden', 'Validación');
       return false;
     }
 

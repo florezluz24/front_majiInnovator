@@ -1,0 +1,106 @@
+<div class="admin-container">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#" (click)="onRefresh($event)" style="cursor: pointer;">
+        <i class="bi bi-shield-check"></i> Panel Administrativo
+      </a>
+      <div class="navbar-nav ms-auto">
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i> 
+            <span>{{ currentUser?.nombre || 'Administrador' }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><span class="dropdown-item-text text-muted">
+              <i class="bi bi-person-badge"></i> 
+              <span>Administrador</span>
+            </span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item text-danger" (click)="onLogout()">
+              <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <div class="card border-0 bg-primary text-white">
+          <div class="card-body py-5">
+            <h1 class="display-4 fw-bold">Panel de Administración</h1>
+            <p class="lead">Gestiona encuestas, usuarios y configuraciones del sistema</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Menu Options -->
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <i class="bi bi-eye text-primary" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="card-title fw-bold">Visualizar Encuestas</h5>
+            <p class="card-text text-muted">Visualiza y gestiona las encuestas existentes</p>
+            <button class="btn btn-outline-primary" (click)="onVisualizarEncuestas()">
+              <i class="bi bi-eye"></i> Visualizar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <i class="bi bi-people text-info" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="card-title fw-bold">Visualizar Usuarios</h5>
+            <p class="card-text text-muted">Visualiza y gestiona todos los usuarios del sistema</p>
+            <button class="btn btn-outline-info" (click)="onVisualizarUsuarios()">
+              <i class="bi bi-people"></i> Ver Usuarios
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <i class="bi bi-graph-up text-success" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="card-title fw-bold">Resultados</h5>
+            <p class="card-text text-muted">Analiza los resultados de las encuestas</p>
+            <button class="btn btn-outline-success" (click)="onVerResultados()">
+              <i class="bi bi-bar-chart"></i> Ver Resultados
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-3">
+        <div class="card h-100 border-0 shadow-sm border-warning">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <i class="bi bi-download text-warning" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="card-title fw-bold">Exportar</h5>
+            <p class="card-text text-muted">Exporta datos y reportes</p>
+            <button class="btn btn-outline-warning" (click)="onExportar()">
+              <i class="bi bi-file-earmark-arrow-down"></i> Exportar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

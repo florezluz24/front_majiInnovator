@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    protected authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -75,18 +75,16 @@ export class LoginComponent implements OnInit {
           'Acceso exitoso'
         );
 
-        // Guardar información del usuario en localStorage (sin contraseña)
-        localStorage.setItem('usuario', JSON.stringify({
-          id: usuario.id,
-          nombre: usuario.nombre,
-          cedula: usuario.cedula,
-          telefono: usuario.telefono,
-          rol: usuario.rol
-        }));
+        // Guardar información del usuario usando el servicio
+        this.authService.login(usuario);
 
-        // Redirigir al dashboard o página principal
+        // Redirigir según el rol del usuario
         setTimeout(() => {
-          this.router.navigate(['/dashboard']);
+          if (usuario.rol === 'Administrador') {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/menu']);
+          }
         }, 1500);
       },
       error: (error) => {
