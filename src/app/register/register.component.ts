@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { AuthService, UsuarioDTO } from '../services/auth.service';
 import { MessageAlertComponent, MessageAlert } from '../shared/message-alert/message-alert.component';
 
+/**
+ * Componente para el registro de nuevos usuarios
+ * Permite a los usuarios crear una cuenta en el sistema
+ */
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -13,9 +17,12 @@ import { MessageAlertComponent, MessageAlert } from '../shared/message-alert/mes
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  /** Título de la empresa */
   protected readonly title = 'MAJI Innovators S.A.S';
+  /** Subtítulo descriptivo del sistema */
   protected readonly subtitle = 'Sistema Integral de Encuestas y Comercio Electrónico';
   
+  /** Datos del formulario de registro */
   protected registerData = {
     nombreCompleto: '',
     cedula: '',
@@ -23,15 +30,27 @@ export class RegisterComponent {
     confirmPassword: ''
   };
 
+  /** Estado de carga del formulario */
   protected isLoading = false;
+  /** Alerta local del componente */
   protected alert: MessageAlert | null = null;
 
+  /**
+   * Constructor del componente de registro
+   * @param router Servicio de navegación de Angular
+   * @param authService Servicio de autenticación
+   * @param cdr Servicio de detección de cambios de Angular
+   */
   constructor(
     private router: Router,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
 
+  /**
+   * Procesa el formulario de registro
+   * Valida los datos y registra al nuevo usuario
+   */
   protected onRegister(): void {
     if (!this.validateForm()) {
       return;
@@ -79,10 +98,16 @@ export class RegisterComponent {
     });
   }
 
+  /**
+   * Navega de vuelta a la página de login
+   */
   protected onBackToLogin(): void {
     this.router.navigate(['/login']);
   }
 
+  /**
+   * Cierra la alerta actual
+   */
   protected onCloseAlert(): void {
     this.clearAlert();
   }
@@ -91,6 +116,10 @@ export class RegisterComponent {
 
 
 
+  /**
+   * Valida el formulario de registro
+   * @returns true si el formulario es válido, false en caso contrario
+   */
   private validateForm(): boolean {
     // Solo validación básica: campos no vacíos
     if (!this.registerData.nombreCompleto.trim()) {
@@ -123,6 +152,11 @@ export class RegisterComponent {
 
 
 
+  /**
+   * Muestra un mensaje de éxito
+   * @param message Mensaje a mostrar
+   * @param title Título opcional del mensaje
+   */
   private showSuccessMessage(message: string, title?: string): void {
     this.alert = {
       type: 'success',
@@ -134,6 +168,11 @@ export class RegisterComponent {
     this.cdr.detectChanges();
   }
 
+  /**
+   * Muestra un mensaje de error
+   * @param message Mensaje de error a mostrar
+   * @param title Título opcional del mensaje
+   */
   private showErrorMessage(message: string, title?: string): void {
     this.alert = {
       type: 'error',
@@ -145,6 +184,9 @@ export class RegisterComponent {
     this.cdr.detectChanges();
   }
 
+  /**
+   * Limpia la alerta actual
+   */
   private clearAlert(): void {
     this.alert = null;
   }

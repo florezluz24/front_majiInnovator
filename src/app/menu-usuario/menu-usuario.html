@@ -1,0 +1,77 @@
+<div class="menu-container">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#" (click)="onRefresh($event)" style="cursor: pointer;">
+        <i class="bi bi-building"></i> MAJI Innovators S.A.S
+      </a>
+      <div class="navbar-nav ms-auto">
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i> 
+            <span>{{ currentUser?.nombre || 'Usuario' }}</span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><span class="dropdown-item-text text-muted">
+              <i class="bi bi-person-badge"></i> 
+              <span>{{ currentUser?.rol || 'Cliente' }}</span>
+            </span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item text-danger" (click)="onLogout()">
+              <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <!-- Welcome Section -->
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <div class="card border-0 bg-primary text-white">
+          <div class="card-body py-5">
+            <h1 class="display-4 fw-bold">Bienvenido al Sistema</h1>
+            <p class="lead">Gestiona encuestas y productos de manera eficiente</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Options -->
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <i class="bi bi-clipboard-data text-primary" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="card-title fw-bold">Responder Encuestas</h5>
+            <p class="card-text text-muted">Participa en encuestas y gana puntos</p>
+            <button class="btn btn-outline-primary" (click)="onResponderEncuestas()">
+              <i class="bi bi-arrow-right"></i> Ir a Encuestas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm border-primary">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <i class="bi bi-cart text-success" style="font-size: 3rem;"></i>
+            </div>
+            <h5 class="card-title fw-bold">Tienda</h5>
+            <p class="card-text text-muted">Compra productos con tus puntos</p>
+            <button class="btn btn-success" (click)="onIrTienda()">
+              <i class="bi bi-arrow-right"></i> Ir a la Tienda
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

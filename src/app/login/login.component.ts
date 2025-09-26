@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { AuthService, ValidarAccesoDTO } from '../services/auth.service';
 import { MessageAlertComponent } from '../shared/message-alert/message-alert.component';
 
+/**
+ * Componente para el inicio de sesión de usuarios
+ * Permite a los usuarios autenticarse en el sistema
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,22 +17,36 @@ import { MessageAlertComponent } from '../shared/message-alert/message-alert.com
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  /** Título de la empresa */
   protected readonly title = 'MAJI Innovators S.A.S';
+  /** Subtítulo descriptivo del sistema */
   protected readonly subtitle = 'Sistema Integral de Encuestas y Comercio Electrónico';
   
+  /** Datos del formulario de login */
   protected loginData: ValidarAccesoDTO = {
     cedula: '',
     password: ''
   };
 
+  /** Estado de carga del formulario */
   protected isLoading = false;
+  /** Mensaje de error local del formulario */
   protected errorMessage = '';
 
+  /**
+   * Constructor del componente de login
+   * @param router Servicio de navegación de Angular
+   * @param authService Servicio de autenticación
+   */
   constructor(
     private router: Router,
     protected authService: AuthService
   ) {}
 
+  /**
+   * Inicialización del componente
+   * Se suscribe a los mensajes del servicio de autenticación
+   */
   ngOnInit(): void {
     // Suscribirse a los mensajes del servicio
     this.authService.message$.subscribe(mensaje => {
@@ -42,6 +60,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Procesa el formulario de login
+   * Valida los datos y autentica al usuario
+   */
   protected onLogin(): void {
     // Validar que los campos no estén vacíos
     if (!this.loginData.cedula.trim()) {
@@ -110,24 +132,35 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Navega a la página de registro
+   */
   protected onRegister(): void {
-    // Navegar al registro
     this.router.navigate(['/register']);
   }
 
+  /**
+   * Limpia el mensaje de error local
+   */
   protected limpiarError(): void {
     this.errorMessage = '';
   }
 
+  /**
+   * Se ejecuta cuando cambia el campo de cédula
+   * Limpia errores para mejorar la experiencia del usuario
+   */
   protected onCedulaChange(): void {
-    // Limpiar error cuando el usuario empiece a escribir
     if (this.errorMessage) {
       this.limpiarError();
     }
   }
 
+  /**
+   * Se ejecuta cuando cambia el campo de contraseña
+   * Limpia errores para mejorar la experiencia del usuario
+   */
   protected onPasswordChange(): void {
-    // Limpiar error cuando el usuario empiece a escribir
     if (this.errorMessage) {
       this.limpiarError();
     }

@@ -1,110 +1,146 @@
-# Maji Innovator - Frontend
+# 📊 Sistema de Encuestas - Proyecto de Clase
 
-Aplicación frontend desarrollada en Angular 20 con Server-Side Rendering (SSR) para el sistema de encuestas Maji Innovator.
+Este es un proyecto completo de un sistema de encuestas desarrollado para una clase de programación.
 
-## 🚀 Tecnologías
+## 🎯 ¿Qué hace este proyecto?
 
-- **Angular 20.2.0** - Framework principal
-- **Angular SSR** - Renderizado del lado del servidor
-- **Bootstrap 5.3.7** - Framework CSS
-- **Ng-Bootstrap 19.0.1** - Componentes Angular para Bootstrap
-- **Bootstrap Icons 1.13.1** - Iconografía
-- **TypeScript 5.9.2** - Lenguaje de programación
-- **SCSS** - Preprocesador CSS
+Es una aplicación web que permite:
+- **Registrar usuarios** en el sistema
+- **Hacer login** con usuario y contraseña
+- **Responder encuestas** sobre productos
+- **Ver estadísticas** (para administradores)
 
-## 📋 Prerrequisitos
+## 🏗️ Estructura del proyecto
 
+Este proyecto tiene **dos partes principales**:
+
+### 1. 🌐 Frontend (Interfaz de Usuario)
+- **Carpeta**: `front_majiInnovator/`
+- **Tecnología**: Angular + TypeScript
+- **¿Qué hace?**: La parte que ven los usuarios (páginas web)
+
+### 2. 📊 Backend (Servidor)
+- **Carpeta**: `ms_majiInnovator/`
+- **Tecnología**: C# + .NET 8
+- **¿Qué hace?**: Maneja los datos y la lógica del negocio
+
+## 🚀 Cómo ejecutar el proyecto completo
+
+### Paso 1: Ejecutar el Backend
+1. Abre Visual Studio
+2. Abre el proyecto en la carpeta `ms_majiInnovator`
+3. Presiona **F5** para ejecutar
+4. El backend estará en `https://localhost:7166`
+
+### Paso 2: Ejecutar el Frontend
+1. Abre la terminal en la carpeta `front_majiInnovator`
+2. Ejecuta: `npm install` (solo la primera vez)
+3. Ejecuta: `npm start`
+4. El frontend estará en `http://localhost:4200`
+
+## 👥 Roles de usuario
+
+### 👤 Usuario Normal
+- Puede registrarse
+- Puede hacer login
+- Puede responder encuestas
+- Puede ver su perfil
+
+### 👨‍💼 Administrador
+- Puede ver todos los usuarios
+- Puede ver todas las respuestas
+- Puede gestionar encuestas
+- Tiene acceso a estadísticas
+
+## 🛠️ Tecnologías utilizadas
+
+### Frontend
+- **Angular 20** - Framework web
+- **Bootstrap** - Para estilos
+- **TypeScript** - Lenguaje de programación
+
+### Backend
+- **C#** - Lenguaje de programación
+- **.NET 8** - Framework de Microsoft
+- **Entity Framework** - Para base de datos
+- **SQL Server** - Base de datos
+
+## 📋 Requisitos para ejecutar
+
+### Para el Backend:
+- Visual Studio 2022 (gratis)
+- .NET 8 SDK
+- SQL Server (LocalDB es suficiente)
+
+### Para el Frontend:
 - Node.js (versión 18 o superior)
-- npm (viene incluido con Node.js)
+- Visual Studio Code (gratis)
 
-## 🛠️ Instalación
+## 🎓 Objetivos de aprendizaje
 
-1. Clona el repositorio:
-```bash
-git clone <url-del-repositorio>
-cd front_majiInnovator
-```
+Este proyecto enseña:
+- Cómo crear una aplicación web completa
+- Cómo conectar frontend con backend
+- Cómo trabajar con bases de datos
+- Cómo estructurar un proyecto de programación
+- Patrones básicos de desarrollo
 
-2. Instala las dependencias:
-```bash
-npm install
-```
-
-## 🏃‍♂️ Ejecución
-
-### Desarrollo
-```bash
-npm start
-```
-La aplicación estará disponible en `http://localhost:4200`
-
-### Construcción para producción
-```bash
-npm run build
-```
-
-### Ejecutar pruebas
-```bash
-npm test
-```
-
-### Servidor SSR
-```bash
-npm run serve:ssr:maji-innovator
-```
-
-## 📁 Estructura del Proyecto
+## 📁 Estructura de carpetas
 
 ```
-src/
-├── app/
-│   ├── login/           # Componente de inicio de sesión
-│   ├── register/        # Componente de registro
-│   ├── services/        # Servicios de la aplicación
-│   │   └── auth.service.ts
-│   ├── shared/          # Componentes compartidos
-│   │   ├── connection-status/
-│   │   └── message-alert/
-│   ├── app.config.ts    # Configuración de la aplicación
-│   ├── app.routes.ts    # Rutas de la aplicación
-│   └── app.ts           # Componente principal
-├── main.ts              # Punto de entrada del cliente
-├── main.server.ts       # Punto de entrada del servidor
-└── server.ts            # Configuración del servidor Express
+Sistema-Encuestas/
+├── front_majiInnovator/     # Frontend (Angular)
+│   ├── src/app/
+│   │   ├── login/           # Página de login
+│   │   ├── register/        # Página de registro
+│   │   ├── menu-usuario/    # Menú de usuario
+│   │   ├── admin-menu/      # Menú de administrador
+│   │   └── services/        # Servicios para conectar con backend
+│   └── README.md
+├── ms_majiInnovator/        # Backend (.NET)
+│   ├── Controladores/       # Rutas de la API
+│   ├── Modelos/            # Tablas de la base de datos
+│   ├── DTOs/               # Datos que se envían/reciben
+│   └── README.md
+└── README.md               # Este archivo
 ```
 
-## 🔧 Configuración
+## 🔧 Configuración importante
 
-### Variables de Entorno
-El proyecto se conecta al backend en `http://localhost:5000` por defecto. Para cambiar esta configuración, modifica el servicio de autenticación.
+- **Backend**: Se ejecuta en `https://localhost:7166`
+- **Frontend**: Se ejecuta en `http://localhost:4200`
+- **Base de datos**: Se crea automáticamente al ejecutar el backend
 
-### CORS
-El backend está configurado para aceptar peticiones desde `http://localhost:4200` y `https://localhost:4200`.
+## ❓ ¿Problemas comunes?
 
-## 🎨 Características
+### El frontend no se conecta al backend
+- Verifica que el backend esté ejecutándose
+- Revisa que la URL en `auth.service.ts` sea correcta
 
-- **Autenticación**: Sistema de login y registro
-- **Responsive Design**: Interfaz adaptable a diferentes dispositivos
-- **Server-Side Rendering**: Mejor rendimiento y SEO
-- **Componentes Reutilizables**: Arquitectura modular
-- **Alertas**: Sistema de notificaciones integrado
+### Error de base de datos
+- Asegúrate de que SQL Server esté instalado
+- Verifica la cadena de conexión en `appsettings.json`
 
-## 📝 Scripts Disponibles
+### Error de dependencias
+- En el frontend: ejecuta `npm install`
+- En el backend: ejecuta `dotnet restore`
 
-- `npm start` - Inicia el servidor de desarrollo
-- `npm run build` - Construye la aplicación para producción
-- `npm run watch` - Construye y observa cambios
-- `npm test` - Ejecuta las pruebas unitarias
-- `npm run serve:ssr:maji-innovator` - Ejecuta la versión SSR
+## 👨‍🏫 Para profesores
 
-## 🤝 Contribución
+Este proyecto es ideal para enseñar:
+- Arquitectura de aplicaciones web
+- Separación de responsabilidades (frontend/backend)
+- Trabajo con APIs REST
+- Gestión de bases de datos
+- Patrones de programación básicos
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+## 📚 Documentación adicional
 
-## 📄 Licencia
+- **Backend**: Ver `ms_majiInnovator/README.md`
+- **Frontend**: Ver `front_majiInnovator/README.md`
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+## 🎉 ¡Listo para empezar!
+
+1. Sigue las instrucciones de cada README
+2. Ejecuta primero el backend, luego el frontend
+3. ¡Disfruta aprendiendo programación!
