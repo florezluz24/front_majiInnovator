@@ -1,0 +1,230 @@
+<div class="catalogo-container">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#" (click)="volverAlMenu(); $event.preventDefault()" style="cursor: pointer;">
+        <i class="bi bi-arrow-left"></i> MAJI Innovators S.A.S
+      </a>
+      <div class="navbar-nav ms-auto">
+        <button class="btn btn-outline-light me-2" (click)="debugEstado()">
+          <i class="bi bi-bug"></i> Debug
+        </button>
+        <button class="btn btn-outline-light" (click)="recargarCatalogo()" [disabled]="isLoading">
+          <i class="bi bi-arrow-clockwise"></i> Actualizar
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <div class="card border-0 bg-primary text-white">
+          <div class="card-body py-4">
+            <h1 class="display-5 fw-bold mb-3">
+              <i class="bi bi-phone"></i> Catálogo de Productos
+            </h1>
+            <p class="lead mb-0">Descubre nuestra amplia gama de celulares y accesorios</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="row">
+      <div class="col-12 text-center">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body py-5">
+            <div class="spinner-border text-primary mb-3" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <h5 class="text-muted">Cargando catálogo...</h5>
+            <p class="text-muted">Por favor espera mientras obtenemos los productos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="errorMessage && !isLoading" class="row">
+      <div class="col-12">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = ''" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debug Panel -->
+    <div class="row mb-3" *ngIf="!isLoading">
+      <div class="col-12">
+        <div class="alert alert-info">
+          <strong>Debug:</strong> 
+          isLoading: {{ isLoading }}, 
+          errorMessage: "{{ errorMessage }}", 
+          catalogo.length: {{ catalogo.length }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Catalog Content -->
+    <div *ngIf="!isLoading && !errorMessage" class="catalogo-content">
+      <!-- Brands Section -->
+      <div *ngFor="let marca of catalogo" class="marca-section mb-5">
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card border-0 bg-light">
+              <div class="card-body py-4">
+                <h2 class="fw-bold text-primary mb-2">
+                  <i class="bi bi-building"></i> {{ marca.nombre }}
+                </h2>
+                <p *ngIf="marca.descripcion" class="text-muted mb-0">{{ marca.descripcion }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Models Grid -->
+        <div class="row g-4">
+          <div *ngFor="let modelo of marca.modelos" class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm modelo-card">
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <h5 class="card-title fw-bold text-dark mb-0">{{ modelo.nombre }}</h5>
+                  <span class="badge" [ngClass]="getDisponibilidadClass(modelo.disponible)">
+                    {{ getDisponibilidadText(modelo.disponible) }}
+                  </span>
+                </div>
+                
+                <p *ngIf="modelo.descripcion" class="card-text text-muted small mb-3">
+                  {{ modelo.descripcion }}
+                </p>
+
+                <div class="mb-3">
+                  <h4 class="text-primary fw-bold mb-0">{{ formatearPrecio(modelo.precio) }}</h4>
+                </div>
+
+                <!-- Characteristics Preview -->
+                <div *ngIf="modelo.caracteristicas.length > 0" class="mb-3">
+                  <h6 class="fw-semibold text-dark mb-2">Características principales:</h6>
+                  <div class="row g-2">
+                    <div *ngFor="let caracteristica of modelo.caracteristicas.slice(0, 3)" class="col-12">
+                      <div class="d-flex justify-content-between">
+                        <span class="text-muted small">{{ caracteristica.nombre }}:</span>
+                        <span class="fw-semibold small">{{ caracteristica.valor }}</span>
+                      </div>
+                    </div>
+                    <div *ngIf="modelo.caracteristicas.length > 3" class="col-12">
+                      <small class="text-muted">+{{ modelo.caracteristicas.length - 3 }} características más</small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-grid">
+                  <button 
+                    class="btn btn-outline-primary" 
+                    (click)="alternarExpansionModelo(modelo)"
+                    [disabled]="!modelo.disponible"
+                  >
+                    <i class="bi" [class.bi-chevron-down]="!esModeloExpandido(modelo.id)" [class.bi-chevron-up]="esModeloExpandido(modelo.id)"></i> 
+                    {{ esModeloExpandido(modelo.id) ? 'Ver Menos' : 'Ver Más' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expanded Model Details -->
+          <div *ngIf="modeloSeleccionado && esModeloExpandido(modeloSeleccionado.id)" class="row mt-3 expanded-details">
+            <div class="col-12">
+              <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h4 class="fw-bold text-primary mb-0">{{ modeloSeleccionado.nombre }}</h4>
+                        <button class="btn btn-sm btn-outline-secondary" (click)="cerrarDetalles()">
+                          <i class="bi bi-x"></i> Cerrar
+                        </button>
+                      </div>
+                      
+                      <div class="mb-3">
+                        <h3 class="text-success fw-bold mb-0">{{ formatearPrecio(modeloSeleccionado.precio) }}</h3>
+                      </div>
+
+                      <div *ngIf="modeloSeleccionado.descripcion" class="mb-4">
+                        <h6 class="fw-semibold">Descripción:</h6>
+                        <p class="text-muted">{{ modeloSeleccionado.descripcion }}</p>
+                      </div>
+
+                      <div class="mb-4">
+                        <h6 class="fw-semibold">Especificaciones técnicas:</h6>
+                        <div class="row g-3">
+                          <div *ngFor="let caracteristica of modeloSeleccionado.caracteristicas" class="col-md-6">
+                            <div class="d-flex justify-content-between p-2 bg-white rounded">
+                              <span class="text-muted">{{ caracteristica.nombre }}:</span>
+                              <span class="fw-semibold">{{ caracteristica.valor }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <h6 class="fw-semibold mb-3">Imágenes del producto:</h6>
+                      
+                      <!-- Loading Images -->
+                      <div *ngIf="cargandoImagenes" class="text-center py-3">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                          <span class="visually-hidden">Cargando imágenes...</span>
+                        </div>
+                        <span class="ms-2 text-muted">Cargando imágenes...</span>
+                      </div>
+
+                      <!-- Images Grid -->
+                      <div *ngIf="!cargandoImagenes && imagenesModelo.length > 0" class="row g-2 image-grid">
+                        <div *ngFor="let imagen of imagenesModelo" class="col-12">
+                          <div class="card border-0 shadow-sm">
+                            <img 
+                              [src]="imagen.rutaImagen" 
+                              [alt]="modeloSeleccionado.nombre + ' - Imagen ' + imagen.id"
+                              class="card-img-top img-fluid"
+                              style="height: 150px; object-fit: cover;"
+                              loading="lazy">
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- No Images Message -->
+                      <div *ngIf="!cargandoImagenes && imagenesModelo.length === 0" class="text-center py-3">
+                        <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                        <p class="text-muted mt-2 mb-0">No hay imágenes disponibles</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="catalogo.length === 0" class="row">
+        <div class="col-12 text-center">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body py-5">
+              <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+              <h5 class="text-muted mt-3">No hay productos disponibles</h5>
+              <p class="text-muted">El catálogo está vacío en este momento</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

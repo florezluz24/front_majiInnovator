@@ -70,10 +70,10 @@ export class MenuUsuarioComponent implements OnInit {
   }
 
   /**
-   * Navega a la tienda (funcionalidad pendiente de implementar)
+   * Navega al catálogo de productos
    */
-  protected onIrTienda(): void {
-    alert('Funcionalidad de ir a la tienda');
+  protected onIrCatalogo(): void {
+    this.router.navigate(['/catalogo']);
   }
 
   /**

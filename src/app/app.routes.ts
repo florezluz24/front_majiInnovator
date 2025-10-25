@@ -6,6 +6,7 @@ import { VisualizarEncuestasComponent } from './visualizar-encuestas/visualizar-
 import { VisualizarUsuariosComponent } from './visualizar-usuarios/visualizar-usuarios';
 import { MenuUsuarioComponent } from './menu-usuario/menu-usuario';
 import { ResponderEncuestasComponent } from './responder-encuestas/responder-encuestas';
+import { CatalogoComponent } from './catalogo/catalogo.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'admin/usuarios', component: VisualizarUsuariosComponent },
   { path: 'menu', component: MenuUsuarioComponent },
   { path: 'menu/encuestas', component: ResponderEncuestasComponent },
+  { path: 'catalogo', component: CatalogoComponent },
   { path: '**', redirectTo: '' }
 ];
