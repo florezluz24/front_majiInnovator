@@ -28,8 +28,6 @@ export class CatalogoComponent implements OnInit {
   protected imagenesModelo: ImagenDTO[] = [];
   /** Estado de carga de imágenes */
   protected cargandoImagenes = false;
-  /** ID del modelo expandido actualmente */
-  protected modeloExpandido: number | null = null;
 
   /**
    * Constructor del componente de catálogo
@@ -88,30 +86,12 @@ export class CatalogoComponent implements OnInit {
   }
 
   /**
-   * Alterna la expansión de un modelo para mostrar sus detalles e imágenes
+   * Selecciona un modelo para mostrar sus detalles e imágenes
    * @param modelo Modelo seleccionado
    */
-  protected alternarExpansionModelo(modelo: ModeloCompletoDTO): void {
-    if (this.modeloExpandido === modelo.id) {
-      // Si ya está expandido, colapsar
-      this.modeloExpandido = null;
-      this.modeloSeleccionado = null;
-      this.imagenesModelo = [];
-    } else {
-      // Expandir nuevo modelo
-      this.modeloExpandido = modelo.id;
-      this.modeloSeleccionado = modelo;
-      this.cargarImagenesModelo(modelo.id);
-    }
-  }
-
-  /**
-   * Verifica si un modelo está expandido
-   * @param modeloId ID del modelo a verificar
-   * @returns true si el modelo está expandido
-   */
-  protected esModeloExpandido(modeloId: number): boolean {
-    return this.modeloExpandido === modeloId;
+  protected seleccionarModelo(modelo: ModeloCompletoDTO): void {
+    this.modeloSeleccionado = modelo;
+    this.cargarImagenesModelo(modelo.id);
   }
 
   /**
@@ -135,10 +115,9 @@ export class CatalogoComponent implements OnInit {
   }
 
   /**
-   * Cierra la expansión del modelo actual
+   * Cierra el modal de detalles del modelo
    */
   protected cerrarDetalles(): void {
-    this.modeloExpandido = null;
     this.modeloSeleccionado = null;
     this.imagenesModelo = [];
   }
