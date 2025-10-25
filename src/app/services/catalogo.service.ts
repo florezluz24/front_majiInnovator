@@ -87,17 +87,7 @@ export class CatalogoService {
       'Content-Type': 'application/json'
     });
 
-    console.log('Realizando petición a:', `${this.baseUrl}/Catalogo/completo`);
-
-    return this.http.get<CatalogoCompletoDTO[]>(`${this.baseUrl}/Catalogo/completo`, { headers })
-      .pipe(
-        tap(response => {
-          console.log('Respuesta del servidor:', response);
-          console.log('Tipo de respuesta:', typeof response);
-          console.log('Es array:', Array.isArray(response));
-        }),
-        catchError(this.handleError.bind(this))
-      );
+    return this.http.get<CatalogoCompletoDTO[]>(`${this.baseUrl}/Catalogo/completo`, { headers });
   }
 
   /**

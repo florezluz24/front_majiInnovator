@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CatalogoService, CatalogoCompletoDTO, ModeloCompletoDTO, ImagenDTO } from '../services/catalogo.service';
@@ -28,17 +28,21 @@ export class CatalogoComponent implements OnInit {
   protected imagenesModelo: ImagenDTO[] = [];
   /** Estado de carga de imágenes */
   protected cargandoImagenes = false;
+  /** ID del modelo expandido actualmente */
+  protected modeloExpandido: number | null = null;
 
   /**
    * Constructor del componente de catálogo
    * @param catalogoService Servicio para obtener datos del catálogo
    * @param authService Servicio de autenticación
    * @param router Servicio de navegación
+   * @param cdr Servicio de detección de cambios de Angular
    */
   constructor(
     private catalogoService: CatalogoService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /**
@@ -66,32 +70,46 @@ export class CatalogoComponent implements OnInit {
    * Carga el catálogo completo desde el backend
    */
   private cargarCatalogo(): void {
-    console.log('Iniciando carga del catálogo...');
     this.isLoading = true;
     this.errorMessage = '';
 
     this.catalogoService.obtenerCatalogoCompleto().subscribe({
       next: (catalogo) => {
-        console.log('Catálogo recibido:', catalogo);
         this.catalogo = catalogo;
         this.isLoading = false;
-        console.log('Estado de carga actualizado a false');
+        this.cdr.detectChanges();
       },
       error: (error) => {
-        console.error('Error al cargar catálogo:', error);
         this.isLoading = false;
         this.errorMessage = 'Error al cargar el catálogo. Intenta nuevamente.';
+        this.cdr.detectChanges();
       }
     });
   }
 
   /**
-   * Selecciona un modelo para mostrar sus detalles e imágenes
+   * Alterna la expansión de un modelo para mostrar sus detalles
    * @param modelo Modelo seleccionado
    */
-  protected seleccionarModelo(modelo: ModeloCompletoDTO): void {
-    this.modeloSeleccionado = modelo;
-    this.cargarImagenesModelo(modelo.id);
+  protected alternarExpansionModelo(modelo: ModeloCompletoDTO): void {
+    if (this.modeloExpandido === modelo.id) {
+      // Si ya está expandido, colapsar
+      this.modeloExpandido = null;
+      this.modeloSeleccionado = null;
+    } else {
+      // Expandir nuevo modelo
+      this.modeloExpandido = modelo.id;
+      this.modeloSeleccionado = modelo;
+    }
+  }
+
+  /**
+   * Verifica si un modelo está expandido
+   * @param modeloId ID del modelo a verificar
+   * @returns true si el modelo está expandido
+   */
+  protected esModeloExpandido(modeloId: number): boolean {
+    return this.modeloExpandido === modeloId;
   }
 
   /**
@@ -106,20 +124,21 @@ export class CatalogoComponent implements OnInit {
       next: (imagenes) => {
         this.imagenesModelo = imagenes;
         this.cargandoImagenes = false;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this.cargandoImagenes = false;
-        console.error('Error al cargar imágenes:', error);
+        this.cdr.detectChanges();
       }
     });
   }
 
   /**
-   * Cierra el modal de detalles del modelo
+   * Cierra la expansión del modelo actual
    */
   protected cerrarDetalles(): void {
+    this.modeloExpandido = null;
     this.modeloSeleccionado = null;
-    this.imagenesModelo = [];
   }
 
   /**
