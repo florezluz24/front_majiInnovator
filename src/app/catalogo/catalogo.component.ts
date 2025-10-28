@@ -30,6 +30,8 @@ export class CatalogoComponent implements OnInit {
   protected cargandoImagenes = false;
   /** ID del modelo expandido actualmente */
   protected modeloExpandido: number | null = null;
+  /** Map de imágenes por modelo */
+  protected modeloImagenes: { [key: number]: ImagenDTO[] } = {};
 
   /**
    * Constructor del componente de catálogo
@@ -76,6 +78,7 @@ export class CatalogoComponent implements OnInit {
     this.catalogoService.obtenerCatalogoCompleto().subscribe({
       next: (catalogo) => {
         this.catalogo = catalogo;
+        this.cargarImagenesParaModelos();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -184,6 +187,35 @@ export class CatalogoComponent implements OnInit {
    */
   protected getDisponibilidadText(disponible: boolean): string {
     return disponible ? 'Disponible' : 'Agotado';
+  }
+
+  /**
+   * Carga las imágenes para todos los modelos del catálogo
+   */
+  private cargarImagenesParaModelos(): void {
+    this.catalogo.forEach(marca => {
+      marca.modelos.forEach(modelo => {
+        this.catalogoService.obtenerImagenesPorModelo(modelo.id).subscribe({
+          next: (imagenes) => {
+            this.modeloImagenes[modelo.id] = imagenes;
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.modeloImagenes[modelo.id] = [];
+          }
+        });
+      });
+    });
+  }
+
+  /**
+   * Selecciona un modelo y carga sus detalles incluyendo imágenes
+   * @param modelo Modelo seleccionado
+   */
+  protected seleccionarModelo(modelo: ModeloCompletoDTO): void {
+    this.modeloSeleccionado = modelo;
+    this.imagenesModelo = [];
+    this.cargarImagenesModelo(modelo.id);
   }
 
   /**
