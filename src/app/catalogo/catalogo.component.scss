@@ -125,6 +125,26 @@
   transform: scale(1.05);
 }
 
+// Modal Images
+.modal-content .card {
+  overflow: hidden;
+  
+  img {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+// Images container
+.position-relative {
+  img {
+    border-radius: 8px;
+  }
+}
+
 // Loading states
 .spinner-border {
   width: 3rem;

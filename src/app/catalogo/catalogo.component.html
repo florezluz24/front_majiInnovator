@@ -15,6 +15,10 @@
 
   <!-- Main Content -->
   <div class="container py-5">
+    <!-- DEBUG -->
+    <div style="position: fixed; top: 0; right: 0; background: lime; color: black; padding: 10px; z-index: 9999; border: 2px solid black;">
+      DEBUG: isLoading={{ isLoading }}, catalogo={{ catalogo.length }}
+    </div>
     <!-- Header Section -->
     <div class="row mb-5">
       <div class="col-12 text-center">
@@ -222,15 +226,17 @@
 
             <!-- Images Grid -->
             <div *ngIf="!cargandoImagenes && imagenesModelo.length > 0" class="row g-3">
-              <div *ngFor="let imagen of imagenesModelo" class="col-md-6">
-                <div class="card border-0 shadow-sm">
-                  <img 
-                    [src]="imagen.rutaImagen" 
-                    [alt]="modeloSeleccionado.nombre"
-                    class="card-img-top img-fluid"
-                    style="height: 200px; object-fit: cover;"
-                    (error)="$event.target.src='assets/placeholder-image.jpg'"
-                  >
+              <div *ngFor="let imagen of imagenesModelo" class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="position-relative" style="height: 250px; overflow: hidden; background-color: #f8f9fa;">
+                    <img 
+                      [src]="imagen.rutaImagen" 
+                      [alt]="modeloSeleccionado.nombre"
+                      class="w-100 h-100"
+                      style="object-fit: contain; transition: transform 0.3s ease;"
+                      (error)="$event.target.src='assets/placeholder-image.jpg'"
+                    >
+                  </div>
                 </div>
               </div>
             </div>

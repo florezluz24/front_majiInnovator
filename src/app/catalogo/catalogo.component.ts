@@ -52,20 +52,24 @@ export class CatalogoComponent implements OnInit {
    * Verifica el acceso del usuario y carga el catálogo
    */
   ngOnInit(): void {
-    this.verifyUserAccess();
-    this.cargarCatalogo();
+    const isAuthenticated = this.verifyUserAccess();
+    if (isAuthenticated) {
+      this.cargarCatalogo();
+    }
   }
 
   /**
    * Verifica que el usuario tenga acceso a esta página
    * Redirige a login si no está autenticado
+   * @returns true si el usuario está autenticado, false en caso contrario
    */
-  private verifyUserAccess(): void {
+  private verifyUserAccess(): boolean {
     const isAuthenticated = this.authService.isAuthenticated();
     if (!isAuthenticated) {
       this.router.navigate(['/login']);
-      return;
+      return false;
     }
+    return true;
   }
 
   /**
@@ -78,9 +82,9 @@ export class CatalogoComponent implements OnInit {
     this.catalogoService.obtenerCatalogoCompleto().subscribe({
       next: (catalogo) => {
         this.catalogo = catalogo;
-        this.cargarImagenesParaModelos();
         this.isLoading = false;
         this.cdr.detectChanges();
+        this.cargarImagenesParaModelos();
       },
       error: (error) => {
         this.isLoading = false;
@@ -198,7 +202,6 @@ export class CatalogoComponent implements OnInit {
         this.catalogoService.obtenerImagenesPorModelo(modelo.id).subscribe({
           next: (imagenes) => {
             this.modeloImagenes[modelo.id] = imagenes;
-            this.cdr.detectChanges();
           },
           error: () => {
             this.modeloImagenes[modelo.id] = [];
