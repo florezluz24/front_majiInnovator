@@ -144,3 +144,11 @@ Este proyecto es ideal para enseñar:
 1. Sigue las instrucciones de cada README
 2. Ejecuta primero el backend, luego el frontend
 3. ¡Disfruta aprendiendo programación!
+
+cliente
+usuario: 1095814976
+contraseña: 1095814976
+
+Administrador
+usuario: 1098697399
+contraseña: 1098697399

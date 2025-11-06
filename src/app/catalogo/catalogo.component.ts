@@ -84,7 +84,6 @@ export class CatalogoComponent implements OnInit {
         this.catalogo = catalogo;
         this.isLoading = false;
         this.cdr.detectChanges();
-        this.cargarImagenesParaModelos();
       },
       error: (error) => {
         this.isLoading = false;
@@ -221,19 +220,4 @@ export class CatalogoComponent implements OnInit {
     this.cargarImagenesModelo(modelo.id);
   }
 
-  /**
-   * Método para debuggear el estado del componente
-   */
-  protected debugEstado(): void {
-    console.log('=== ESTADO DEL COMPONENTE ===');
-    console.log('isLoading:', this.isLoading);
-    console.log('errorMessage:', this.errorMessage);
-    console.log('catalogo:', this.catalogo);
-    console.log('catalogo.length:', this.catalogo.length);
-    console.log('modeloSeleccionado:', this.modeloSeleccionado);
-    console.log('cargandoImagenes:', this.cargandoImagenes);
-    console.log('imagenesModelo:', this.imagenesModelo);
-    console.log('imagenesModelo.length:', this.imagenesModelo.length);
-    console.log('============================');
-  }
 }

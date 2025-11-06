@@ -15,10 +15,6 @@
 
   <!-- Main Content -->
   <div class="container py-5">
-    <!-- DEBUG -->
-    <div style="position: fixed; top: 0; right: 0; background: lime; color: black; padding: 10px; z-index: 9999; border: 2px solid black;">
-      DEBUG: isLoading={{ isLoading }}, catalogo={{ catalogo.length }}
-    </div>
     <!-- Header Section -->
     <div class="row mb-5">
       <div class="col-12 text-center">
@@ -86,13 +82,13 @@
                   <div class="col-md-3">
                     <div class="product-image-container">
                       <img 
-                        *ngIf="modeloImagenes[modelo.id] && modeloImagenes[modelo.id].length > 0" 
-                        [src]="modeloImagenes[modelo.id][0].rutaImagen" 
+                        *ngIf="modelo.primeraImagen" 
+                        [src]="modelo.primeraImagen" 
                         [alt]="modelo.nombre"
                         class="product-image"
                         (error)="$event.target.src='assets/placeholder-image.jpg'"
                       >
-                      <div *ngIf="!modeloImagenes[modelo.id] || modeloImagenes[modelo.id].length === 0" class="product-placeholder">
+                      <div *ngIf="!modelo.primeraImagen" class="product-placeholder">
                         <i class="bi bi-phone" style="font-size: 4rem;"></i>
                       </div>
                     </div>

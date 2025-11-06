@@ -31,6 +31,8 @@ export interface ModeloCompletoDTO {
   disponible: boolean;
   /** Lista de características del modelo */
   caracteristicas: CaracteristicaCompletaDTO[];
+  /** Primera imagen del modelo para mostrar en la lista */
+  primeraImagen?: string;
 }
 
 /**
