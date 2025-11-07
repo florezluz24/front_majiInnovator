@@ -1,0 +1,281 @@
+<div *ngIf="mostrar" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" (click)="onCerrar()">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" (click)="$event.stopPropagation()">
+    <div class="modal-content pago-modal-content">
+      <div class="modal-header pago-modal-header">
+        <h5 class="modal-title fw-bold">
+          <i class="bi bi-credit-card"></i> Pago con Tarjeta de Crédito
+        </h5>
+        <button type="button" class="btn-close" (click)="onCerrar()" aria-label="Close" [disabled]="procesando"></button>
+      </div>
+      
+      <div class="modal-body pago-modal-body">
+        <!-- Producto Info -->
+        <div class="producto-info-card mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="fw-bold text-dark mb-1">{{ nombreProducto }}</h6>
+              <p class="text-muted mb-0 small">Producto seleccionado</p>
+            </div>
+            <div class="text-end">
+              <h5 class="fw-bold text-primary mb-0">{{ formatearPrecio(precioTotal) }}</h5>
+              <p class="text-muted mb-0 small">Precio total</p>
+            </div>
+          </div>
+        </div>
+
+        <form (ngSubmit)="onProcesarPago()">
+          <!-- Información Personal -->
+          <div class="form-section mb-4">
+            <h6 class="section-title mb-3">
+              <i class="bi bi-person"></i> Información Personal
+            </h6>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="nombre" class="form-label fw-semibold">Nombre Completo</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('nombre')"
+                  id="nombre" 
+                  [(ngModel)]="datosPago.nombre" 
+                  name="nombre"
+                  placeholder="Ingrese su nombre completo"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('nombre')">
+                  {{ obtenerMensajeError('nombre') }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="correo" class="form-label fw-semibold">Correo Electrónico</label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('correo')"
+                  id="correo" 
+                  [(ngModel)]="datosPago.correo" 
+                  name="correo"
+                  placeholder="correo@ejemplo.com"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('correo')">
+                  {{ obtenerMensajeError('correo') }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="telefono" class="form-label fw-semibold">Teléfono</label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('telefono')"
+                  id="telefono" 
+                  [(ngModel)]="datosPago.telefono" 
+                  name="telefono"
+                  placeholder="3001234567"
+                  maxlength="10"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('telefono')">
+                  {{ obtenerMensajeError('telefono') }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="ciudad" class="form-label fw-semibold">Ciudad</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('ciudad')"
+                  id="ciudad" 
+                  [(ngModel)]="datosPago.ciudad" 
+                  name="ciudad"
+                  placeholder="Ingrese su ciudad"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('ciudad')">
+                  {{ obtenerMensajeError('ciudad') }}
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="direccion" class="form-label fw-semibold">Dirección</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('direccion')"
+                  id="direccion" 
+                  [(ngModel)]="datosPago.direccion" 
+                  name="direccion"
+                  placeholder="Ingrese su dirección completa"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('direccion')">
+                  {{ obtenerMensajeError('direccion') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de Tarjeta -->
+          <div class="form-section mb-4">
+            <h6 class="section-title mb-3">
+              <i class="bi bi-credit-card-2-front"></i> Información de Tarjeta
+            </h6>
+            
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="numeroTarjeta" class="form-label fw-semibold">Número de Tarjeta</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('numeroTarjeta')"
+                  id="numeroTarjeta" 
+                  [(ngModel)]="datosPago.numeroTarjeta" 
+                  name="numeroTarjeta"
+                  placeholder="1234 5678 9012 3456"
+                  maxlength="19"
+                  (input)="formatearNumeroTarjeta($event)"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('numeroTarjeta')">
+                  {{ obtenerMensajeError('numeroTarjeta') }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="fechaVencimiento" class="form-label fw-semibold">Fecha de Vencimiento</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('fechaVencimiento')"
+                  id="fechaVencimiento" 
+                  [(ngModel)]="datosPago.fechaVencimiento" 
+                  name="fechaVencimiento"
+                  placeholder="MM/AA"
+                  maxlength="5"
+                  (input)="formatearFechaVencimiento($event)"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('fechaVencimiento')">
+                  {{ obtenerMensajeError('fechaVencimiento') }}
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="codigoCCV" class="form-label fw-semibold">Código CCV</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  [class.is-invalid]="tieneError('codigoCCV')"
+                  id="codigoCCV" 
+                  [(ngModel)]="datosPago.codigoCCV" 
+                  name="codigoCCV"
+                  placeholder="123"
+                  maxlength="3"
+                  (input)="formatearCCV($event)"
+                  [disabled]="procesando"
+                  required
+                >
+                <div class="invalid-feedback" *ngIf="tieneError('codigoCCV')">
+                  {{ obtenerMensajeError('codigoCCV') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opciones de Pago -->
+          <div class="form-section mb-4">
+            <h6 class="section-title mb-3">
+              <i class="bi bi-calendar-check"></i> Opciones de Pago
+            </h6>
+            
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="cantidadCuotas" class="form-label fw-semibold">Cantidad de Cuotas</label>
+                <select 
+                  class="form-select" 
+                  [class.is-invalid]="tieneError('cantidadCuotas')"
+                  id="cantidadCuotas" 
+                  [(ngModel)]="datosPago.cantidadCuotas" 
+                  name="cantidadCuotas"
+                  [disabled]="procesando"
+                  required
+                >
+                  <option *ngFor="let cuota of opcionesCuotas" [value]="cuota">
+                    {{ cuota }} {{ cuota === 1 ? 'cuota' : 'cuotas' }}
+                  </option>
+                </select>
+                <div class="invalid-feedback" *ngIf="tieneError('cantidadCuotas')">
+                  {{ obtenerMensajeError('cantidadCuotas') }}
+                </div>
+                
+                <div *ngIf="datosPago.cantidadCuotas > 1" class="mt-2 p-3 bg-light rounded">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Valor por cuota:</span>
+                    <span class="fw-bold text-primary">{{ formatearPrecio(calcularValorCuota()) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumen de Pago -->
+          <div class="resumen-pago-card mb-4">
+            <h6 class="fw-bold mb-3">
+              <i class="bi bi-receipt"></i> Resumen de Pago
+            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted">Subtotal:</span>
+              <span class="fw-semibold">{{ formatearPrecio(precioTotal) }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-muted">Cuotas:</span>
+              <span class="fw-semibold">{{ datosPago.cantidadCuotas }} {{ datosPago.cantidadCuotas === 1 ? 'cuota' : 'cuotas' }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold">Total a pagar:</span>
+              <span class="fw-bold text-primary fs-5">{{ formatearPrecio(precioTotal) }}</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer pago-modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="onCerrar()"
+          [disabled]="procesando"
+        >
+          <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          (click)="onProcesarPago()"
+          [disabled]="procesando"
+        >
+          <span *ngIf="!procesando">
+            <i class="bi bi-check-circle"></i> Procesar Pago
+          </span>
+          <span *ngIf="procesando">
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Procesando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

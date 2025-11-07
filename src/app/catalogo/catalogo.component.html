@@ -150,10 +150,10 @@
                     <div class="action-buttons">
                       <button 
                         class="btn btn-primary w-100 mb-2"
-                        (click)="seleccionarModelo(modelo)"
+                        (click)="abrirModalPago(modelo)"
                         [disabled]="!modelo.disponible"
                       >
-                        <i class="bi bi-cart-plus"></i> Ver Detalles
+                        <i class="bi bi-cart-plus"></i> Comprar
                       </button>
                     </div>
                   </div>
@@ -266,6 +266,31 @@
             <i class="bi bi-x-circle"></i> Cerrar
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pago Modal -->
+  <app-pago-modal
+    [mostrar]="mostrarModalPago"
+    [precioTotal]="modeloParaPago?.precio || 0"
+    [nombreProducto]="modeloParaPago?.nombre || ''"
+    (cerrar)="cerrarModalPago()"
+    (procesarPago)="procesarPago($event)"
+  ></app-pago-modal>
+
+  <!-- Popup de Éxito -->
+  <div *ngIf="mostrarPopupExito" class="popup-exito-overlay" (click)="cerrarPopupExito()">
+    <div class="popup-exito-container" (click)="$event.stopPropagation()">
+      <div class="popup-exito-content">
+        <div class="popup-exito-icon">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <h4 class="popup-exito-title">Pago realizado exitosamente</h4>
+        <p class="popup-exito-message">Tu pago ha sido procesado correctamente. Recibirás un correo de confirmación con la información de fecha de entrega.</p>
+        <button class="btn btn-primary popup-exito-button" (click)="cerrarPopupExito()">
+          <i class="bi bi-check-lg"></i> Aceptar
+        </button>
       </div>
     </div>
   </div>

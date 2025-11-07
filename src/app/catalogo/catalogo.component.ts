@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CatalogoService, CatalogoCompletoDTO, ModeloCompletoDTO, ImagenDTO } from '../services/catalogo.service';
 import { AuthService } from '../services/auth.service';
+import { PagoModalComponent } from './pago-modal.component';
 
 /**
  * Componente para mostrar el catálogo de productos
@@ -11,7 +12,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PagoModalComponent],
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.scss']
 })
@@ -32,6 +33,12 @@ export class CatalogoComponent implements OnInit {
   protected modeloExpandido: number | null = null;
   /** Map de imágenes por modelo */
   protected modeloImagenes: { [key: number]: ImagenDTO[] } = {};
+  /** Estado de visibilidad del modal de pago */
+  protected mostrarModalPago: boolean = false;
+  /** Modelo seleccionado para pago */
+  protected modeloParaPago: ModeloCompletoDTO | null = null;
+  /** Estado de visibilidad del popup de éxito */
+  protected mostrarPopupExito: boolean = false;
 
   /**
    * Constructor del componente de catálogo
@@ -218,6 +225,59 @@ export class CatalogoComponent implements OnInit {
     this.modeloSeleccionado = modelo;
     this.imagenesModelo = [];
     this.cargarImagenesModelo(modelo.id);
+  }
+
+  /**
+   * Abre el modal de pago para un modelo específico
+   * @param modelo Modelo seleccionado para comprar
+   */
+  protected abrirModalPago(modelo: ModeloCompletoDTO): void {
+    if (!modelo.disponible) {
+      return;
+    }
+    this.modeloParaPago = modelo;
+    this.mostrarModalPago = true;
+  }
+
+  /**
+   * Cierra el modal de pago
+   */
+  protected cerrarModalPago(): void {
+    this.mostrarModalPago = false;
+    this.modeloParaPago = null;
+  }
+
+  /**
+   * Procesa el pago del modelo seleccionado
+   * @param datosPago Datos del pago recibidos del modal
+   */
+  protected procesarPago(datosPago: any): void {
+    if (!this.modeloParaPago) {
+      return;
+    }
+
+    const datosCompletos = {
+      modeloId: this.modeloParaPago.id,
+      modeloNombre: this.modeloParaPago.nombre,
+      precio: this.modeloParaPago.precio,
+      ...datosPago
+    };
+
+    console.log('Procesando pago:', datosCompletos);
+    
+    this.cerrarModalPago();
+    this.mostrarPopupExito = true;
+    
+    setTimeout(() => {
+      this.cerrarPopupExito();
+    }, 3000);
+  }
+
+  /**
+   * Cierra el popup de éxito
+   */
+  protected cerrarPopupExito(): void {
+    this.mostrarPopupExito = false;
   }
 
 }
