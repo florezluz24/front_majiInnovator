@@ -275,6 +275,7 @@
     [mostrar]="mostrarModalPago"
     [precioTotal]="modeloParaPago?.precio || 0"
     [nombreProducto]="modeloParaPago?.nombre || ''"
+    [procesando]="procesandoPago"
     (cerrar)="cerrarModalPago()"
     (procesarPago)="procesarPago($event)"
   ></app-pago-modal>

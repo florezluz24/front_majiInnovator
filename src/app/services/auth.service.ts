@@ -129,6 +129,7 @@ export interface RespuestaEncuesta {
   respuesta: string;
 }
 
+
 /**
  * Servicio de autenticación y comunicación con el backend
  * Maneja el login, registro, gestión de usuarios y encuestas

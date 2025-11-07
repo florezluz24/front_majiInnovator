@@ -25,6 +25,7 @@ export class PagoModalComponent {
   @Input() mostrar: boolean = false;
   @Input() precioTotal: number = 0;
   @Input() nombreProducto: string = '';
+  @Input() procesando: boolean = false;
   @Output() cerrar = new EventEmitter<void>();
   @Output() procesarPago = new EventEmitter<DatosPago>();
 
@@ -41,7 +42,6 @@ export class PagoModalComponent {
   };
 
   opcionesCuotas: number[] = [1, 3, 6, 12, 18, 24, 36];
-  procesando: boolean = false;
   errores: { [key: string]: string } = {};
 
   formatearPrecio(precio: number): string {
@@ -140,8 +140,6 @@ export class PagoModalComponent {
     if (!this.validarFormulario()) {
       return;
     }
-
-    this.procesando = true;
     
     const datosPagoLimpio: DatosPago = {
       ...this.datosPago,
@@ -165,7 +163,6 @@ export class PagoModalComponent {
       cantidadCuotas: 1
     };
     this.errores = {};
-    this.procesando = false;
   }
 
   obtenerMensajeError(campo: string): string {

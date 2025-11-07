@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CatalogoService, CatalogoCompletoDTO, ModeloCompletoDTO, ImagenDTO } from '../services/catalogo.service';
 import { AuthService } from '../services/auth.service';
+import { PagoService } from '../services/pago.service';
 import { PagoModalComponent } from './pago-modal.component';
 
 /**
@@ -39,17 +40,21 @@ export class CatalogoComponent implements OnInit {
   protected modeloParaPago: ModeloCompletoDTO | null = null;
   /** Estado de visibilidad del popup de éxito */
   protected mostrarPopupExito: boolean = false;
+  /** Estado de procesamiento del pago */
+  protected procesandoPago: boolean = false;
 
   /**
    * Constructor del componente de catálogo
    * @param catalogoService Servicio para obtener datos del catálogo
    * @param authService Servicio de autenticación
+   * @param pagoService Servicio de pago
    * @param router Servicio de navegación
    * @param cdr Servicio de detección de cambios de Angular
    */
   constructor(
     private catalogoService: CatalogoService,
     private authService: AuthService,
+    private pagoService: PagoService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -245,6 +250,7 @@ export class CatalogoComponent implements OnInit {
   protected cerrarModalPago(): void {
     this.mostrarModalPago = false;
     this.modeloParaPago = null;
+    this.procesandoPago = false;
   }
 
   /**
@@ -256,21 +262,47 @@ export class CatalogoComponent implements OnInit {
       return;
     }
 
-    const datosCompletos = {
-      modeloId: this.modeloParaPago.id,
-      modeloNombre: this.modeloParaPago.nombre,
-      precio: this.modeloParaPago.precio,
-      ...datosPago
+    const usuarioActual = this.authService.getCurrentUser();
+    if (!usuarioActual) {
+      this.authService.mostrarMensajeError('No se encontró información del usuario. Por favor, inicia sesión nuevamente.');
+      this.cerrarModalPago();
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const numeroTarjetaLimpio = datosPago.numeroTarjeta.replace(/\s/g, '');
+    const ultimosCuatroDigitos = numeroTarjetaLimpio.slice(-4);
+
+    this.procesandoPago = true;
+
+    const pagoDTO = {
+      usuarioId: usuarioActual.id,
+      valor: this.modeloParaPago.precio,
+      ultimosCuatroDigitosTarjeta: ultimosCuatroDigitos,
+      estado: 'Completado'
     };
 
-    console.log('Procesando pago:', datosCompletos);
-    
-    this.cerrarModalPago();
-    this.mostrarPopupExito = true;
-    
-    setTimeout(() => {
-      this.cerrarPopupExito();
-    }, 3000);
+    this.pagoService.crearPago(pagoDTO).subscribe({
+      next: (pagoRespuesta) => {
+        this.procesandoPago = false;
+        this.pagoService.setLoading(false);
+        this.cerrarModalPago();
+        this.pagoService.mostrarMensajeExito(
+          `Pago procesado exitosamente. ID de transacción: ${pagoRespuesta.id}`,
+          'Pago Completado'
+        );
+        this.mostrarPopupExito = true;
+        
+        setTimeout(() => {
+          this.cerrarPopupExito();
+        }, 3000);
+      },
+      error: (error) => {
+        this.procesandoPago = false;
+        this.pagoService.setLoading(false);
+        this.cerrarModalPago();
+      }
+    });
   }
 
   /**
