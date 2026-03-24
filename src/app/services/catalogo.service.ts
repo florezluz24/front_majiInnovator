@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -72,7 +73,7 @@ export interface ImagenDTO {
 })
 export class CatalogoService {
   /** URL base del backend API */
-  private readonly baseUrl = 'https://localhost:7166/api';
+  private readonly baseUrl = environment.apiUrl;
 
   /**
    * Constructor del servicio de catálogo

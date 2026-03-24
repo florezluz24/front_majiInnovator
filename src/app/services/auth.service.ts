@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -139,7 +140,7 @@ export interface RespuestaEncuesta {
 })
 export class AuthService {
   /** URL base del backend API */
-  private readonly baseUrl = 'https://localhost:7166/api';
+  private readonly baseUrl = environment.apiUrl;
   
   /** Clave para almacenar el usuario actual en localStorage */
   private readonly STORAGE_KEY = 'currentUser';

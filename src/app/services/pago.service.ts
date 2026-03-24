@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -45,7 +46,7 @@ export interface PagoRespuestaDTO {
 })
 export class PagoService {
   /** URL base del backend API */
-  private readonly baseUrl = 'https://localhost:7166/api';
+  private readonly baseUrl = environment.apiUrl;
 
   /** Subject para manejar mensajes de alerta globales */
   private messageSubject = new BehaviorSubject<MessageAlert | null>(null);
