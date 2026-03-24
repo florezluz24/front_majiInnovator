@@ -4,5 +4,5 @@
  */
 export const environment = {
   production: true,
-  apiUrl: 'clea119.229/api',
+  apiUrl: 'http://20.72.119.229/api',
 };
